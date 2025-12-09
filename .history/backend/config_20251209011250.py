@@ -52,11 +52,10 @@ COUNCIL_MODELS = [
     # "openrouter/google/gemini-2.5-flash",
     # "openrouter/anthropic/claude-3.5-sonnet",
     "ollama/deepseek-r1:1.5b",
-    "ollama/qwen3:1.7b",
 ]
 
 # Chairman model - synthesizes final response
-CHAIRMAN_MODEL = "deepseek/deepseek-chat"
+CHAIRMAN_MODEL = "ollama/gemma3:latest"
 
 # Data directory for conversation storage
 DATA_DIR = "data/conversations"

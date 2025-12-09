@@ -48,15 +48,14 @@ MODEL_CONFIGS = {
 # Council members - list of model identifiers
 # Only configured providers will be used (graceful degradation)
 COUNCIL_MODELS = [
-    # "openrouter/openai/gpt-4o",
-    # "openrouter/google/gemini-2.5-flash",
-    # "openrouter/anthropic/claude-3.5-sonnet",
-    "ollama/deepseek-r1:1.5b",
-    "ollama/qwen3:1.7b",
+    "openrouter/openai/gpt-4o",
+    "openrouter/google/gemini-2.5-flash",
+    "openrouter/anthropic/claude-3.5-sonnet",
+    "ollama/llama3.1",
 ]
 
 # Chairman model - synthesizes final response
-CHAIRMAN_MODEL = "deepseek/deepseek-chat"
+CHAIRMAN_MODEL = "openrouter/google/gemini-2.5-flash"
 
 # Data directory for conversation storage
 DATA_DIR = "data/conversations"

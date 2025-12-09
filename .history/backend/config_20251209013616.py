@@ -56,7 +56,7 @@ COUNCIL_MODELS = [
 ]
 
 # Chairman model - synthesizes final response
-CHAIRMAN_MODEL = "deepseek/deepseek-chat"
+CHAIRMAN_MODEL = "ollama/gemma3:latest"
 
 # Data directory for conversation storage
 DATA_DIR = "data/conversations"

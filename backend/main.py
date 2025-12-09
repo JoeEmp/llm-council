@@ -138,6 +138,15 @@ async def send_message_stream(conversation_id: str, request: SendMessageRequest)
     is_first_message = len(conversation["messages"]) == 0
 
     async def event_generator():
+        # Initialize variables to store results
+        stage1_results = []
+        stage2_results = []
+        label_to_model = {}
+        stage3_result = {
+            "model": "error",
+            "response": "Failed to generate response: An error occurred during processing."
+        }
+
         try:
             # Add user message
             storage.add_user_message(conversation_id, request.content)
@@ -169,20 +178,21 @@ async def send_message_stream(conversation_id: str, request: SendMessageRequest)
                 storage.update_conversation_title(conversation_id, title)
                 yield f"data: {json.dumps({'type': 'title_complete', 'data': {'title': title}})}\n\n"
 
-            # Save complete assistant message
-            storage.add_assistant_message(
-                conversation_id,
-                stage1_results,
-                stage2_results,
-                stage3_result
-            )
-
             # Send completion event
             yield f"data: {json.dumps({'type': 'complete'})}\n\n"
 
         except Exception as e:
             # Send error event
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+        finally:
+            # Always save assistant message with whatever data we have
+            # This ensures partial results are saved even if an error occurs
+            storage.add_assistant_message(
+                conversation_id,
+                stage1_results,
+                stage2_results,
+                stage3_result
+            )
 
     return StreamingResponse(
         event_generator(),

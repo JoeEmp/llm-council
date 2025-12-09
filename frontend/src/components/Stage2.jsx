@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import Collapsible from './Collapsible';
 import './Stage2.css';
 
 function deAnonymizeText(text, labelToModel) {
@@ -12,6 +14,44 @@ function deAnonymizeText(text, labelToModel) {
     result = result.replace(new RegExp(label, 'g'), `**${modelShortName}**`);
   });
   return result;
+}
+
+/**
+ * Split response text into thinking and main content
+ * Supports: <think>...</think> tags (DeepSeek-R1, etc.)
+ */
+function splitThinkingFromContent(text) {
+  // Check for <think>...</think> pattern
+  const thinkPattern = /<think>([\s\S]*?)<\/think>/;
+  const match = text.match(thinkPattern);
+
+  if (match) {
+    const thinking = match[1].trim();
+    const content = text.replace(thinkPattern, '').trim();
+    return { hasThinking: true, thinking, content };
+  }
+
+  return { hasThinking: false, thinking: '', content: text };
+}
+
+function EvaluationWithThinking({ content, labelToModel }) {
+  const deAnonymizedContent = deAnonymizeText(content, labelToModel);
+  const { hasThinking, thinking, content: mainContent } = splitThinkingFromContent(deAnonymizedContent);
+
+  if (!hasThinking) {
+    return <ReactMarkdown remarkPlugins={[remarkGfm]}>{deAnonymizedContent}</ReactMarkdown>;
+  }
+
+  return (
+    <>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{mainContent}</ReactMarkdown>
+      <Collapsible title="思考过程" defaultExpanded={false}>
+        <div className="thinking-content">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{thinking}</ReactMarkdown>
+        </div>
+      </Collapsible>
+    </>
+  );
 }
 
 export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
@@ -48,9 +88,10 @@ export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
           {rankings[activeTab].model}
         </div>
         <div className="ranking-content markdown-content">
-          <ReactMarkdown>
-            {deAnonymizeText(rankings[activeTab].ranking, labelToModel)}
-          </ReactMarkdown>
+          <EvaluationWithThinking
+            content={rankings[activeTab].ranking}
+            labelToModel={labelToModel}
+          />
         </div>
 
         {rankings[activeTab].parsed_ranking &&

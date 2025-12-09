@@ -1,6 +1,45 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import Collapsible from './Collapsible';
 import './Stage1.css';
+
+/**
+ * Split response text into thinking and main content
+ * Supports: <think>...</think> tags (DeepSeek-R1, etc.)
+ */
+function splitThinkingFromContent(text) {
+  // Check for <think>...</think> pattern
+  const thinkPattern = /<think>([\s\S]*?)<\/think>/;
+  const match = text.match(thinkPattern);
+
+  if (match) {
+    const thinking = match[1].trim();
+    const content = text.replace(thinkPattern, '').trim();
+    return { hasThinking: true, thinking, content };
+  }
+
+  return { hasThinking: false, thinking: '', content: text };
+}
+
+function ResponseWithThinking({ content }) {
+  const { hasThinking, thinking, content: mainContent } = splitThinkingFromContent(content);
+
+  if (!hasThinking) {
+    return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>;
+  }
+
+  return (
+    <>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{mainContent}</ReactMarkdown>
+      <Collapsible title="思考过程" defaultExpanded={false}>
+        <div className="thinking-content">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{thinking}</ReactMarkdown>
+        </div>
+      </Collapsible>
+    </>
+  );
+}
 
 export default function Stage1({ responses }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -28,7 +67,7 @@ export default function Stage1({ responses }) {
       <div className="tab-content">
         <div className="model-name">{responses[activeTab].model}</div>
         <div className="response-text markdown-content">
-          <ReactMarkdown>{responses[activeTab].response}</ReactMarkdown>
+          <ResponseWithThinking content={responses[activeTab].response} />
         </div>
       </div>
     </div>

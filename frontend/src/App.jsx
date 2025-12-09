@@ -156,8 +156,11 @@ function App() {
             break;
 
           case 'complete':
-            // Stream complete, reload conversations list
+            // Stream complete, reload conversations list and current conversation
             loadConversations();
+            if (currentConversationId) {
+              loadConversation(currentConversationId);
+            }
             setIsLoading(false);
             break;
 

@@ -124,6 +124,19 @@
   font-size: 14px;
 }
 
+.thinking-content {
+  font-size: 0.95em;
+  color: #666;
+  border-left: 3px solid #ddd;
+  padding-left: 16px;
+  margin: 12px 0;
+}
+
+.thinking-content p {
+  margin-bottom: 8px;
+}
+
+
 .parsed-ranking {
   margin-top: 16px;
   padding-top: 16px;

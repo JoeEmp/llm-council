@@ -1,0 +1,44 @@
+INFO:     Started server process [39078]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55160 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "GET /api/conversations/873921f1-a321-4bf6-bfcf-ffcae55ac983 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "OPTIONS /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "POST /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "GET /api/conversations/22a2e1ac-c7db-4e04-86a8-539483b8fe06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55160 - "OPTIONS /api/conversations/22a2e1ac-c7db-4e04-86a8-539483b8fe06/message/stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55170 - "POST /api/conversations/22a2e1ac-c7db-4e04-86a8-539483b8fe06/message/stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55981 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55981 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55981 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55981 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56229 - "GET /api/conversations/ad38de86-a617-432a-9f18-381a13c3b50e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56229 - "GET /api/conversations/22a2e1ac-c7db-4e04-86a8-539483b8fe06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /api/conversations/873921f1-a321-4bf6-bfcf-ffcae55ac983 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /api/conversations/b57fd350-4467-4a9b-b66f-0f21b2154618 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /api/conversations/b4204a49-0220-4ea9-a960-2929dd8203e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /api/conversations/ad38de86-a617-432a-9f18-381a13c3b50e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56496 - "GET /api/conversations/22a2e1ac-c7db-4e04-86a8-539483b8fe06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56518 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56518 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56518 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56518 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56960 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56960 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56960 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56960 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57121 - "GET /api/conversations/22a2e1ac-c7db-4e04-86a8-539483b8fe06 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57229 - "GET /api/conversations/ad38de86-a617-432a-9f18-381a13c3b50e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations/ad38de86-a617-432a-9f18-381a13c3b50e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations/b4204a49-0220-4ea9-a960-2929dd8203e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations/ad38de86-a617-432a-9f18-381a13c3b50e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations/b4204a49-0220-4ea9-a960-2929dd8203e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations/b57fd350-4467-4a9b-b66f-0f21b2154618 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations/873921f1-a321-4bf6-bfcf-ffcae55ac983 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57248 - "GET /api/conversations/22a2e1ac-c7db-4e04-86a8-539483b8fe06 HTTP/1.1" 200 OK

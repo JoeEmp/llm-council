@@ -63,3 +63,15 @@
   color: #333;
   line-height: 1.6;
 }
+
+.thinking-content {
+  font-size: 0.95em;
+  color: #666;
+  border-left: 3px solid #ddd;
+  padding-left: 16px;
+  margin: 12px 0;
+}
+
+.thinking-content p {
+  margin-bottom: 8px;
+}
