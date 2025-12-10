@@ -3,7 +3,7 @@ import { api } from '../api';
 import './ConfigPanel.css';
 
 export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
-  const [config, setConfig] = useState(null);
+  const [config, setConfig] = useState({ council_models: [], chairman_model: '' });
   const [availableProviders, setAvailableProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -172,7 +172,7 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
               <div className="config-info">
                 <h4>Available Providers:</h4>
                 <div className="provider-list">
-                  {available_providers.map((provider) => (
+                  {availableProviders.map((provider) => (
                     <span key={provider} className="provider-tag">
                       {provider}
                     </span>
