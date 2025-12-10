@@ -57,6 +57,12 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      addModel();
+    }
+  };
+
   const removeModel = (index) => {
     setConfig({
       ...config,
@@ -143,7 +149,7 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
                     type="text"
                     value={newModel}
                     onChange={(e) => setNewModel(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addModel()}
+                    onKeyDown={handleKeyDown}
                     className="new-model-input"
                     placeholder="Add new model (e.g., ollama/llama2)"
                   />

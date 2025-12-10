@@ -31,12 +31,12 @@ function ResponseWithThinking({ content }) {
 
   return (
     <>
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{mainContent}</ReactMarkdown>
-      <Collapsible title="思考过程" defaultExpanded={false}>
+      <Collapsible title="think" defaultExpanded={true}>
         <div className="thinking-content">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{thinking}</ReactMarkdown>
         </div>
       </Collapsible>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{mainContent}</ReactMarkdown>
     </>
   );
 }

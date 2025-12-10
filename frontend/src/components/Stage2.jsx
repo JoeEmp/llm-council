@@ -45,7 +45,7 @@ function EvaluationWithThinking({ content, labelToModel }) {
   return (
     <>
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{mainContent}</ReactMarkdown>
-      <Collapsible title="思考过程" defaultExpanded={false}>
+      <Collapsible title="think" defaultExpanded={false}>
         <div className="thinking-content">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{thinking}</ReactMarkdown>
         </div>

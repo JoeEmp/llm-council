@@ -5,6 +5,7 @@ import './ModelSelector.css';
 export default function ModelSelector({ onModelsSelected, onCancel }) {
   const [config, setConfig] = useState(null);
   const [availableProviders, setAvailableProviders] = useState([]);
+  const [recommendedModels, setRecommendedModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCouncil, setSelectedCouncil] = useState([]);
   const [selectedChairman, setSelectedChairman] = useState('');
@@ -17,11 +18,32 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
   const loadConfig = async () => {
     try {
       setLoading(true);
-      const result = await api.getConfig();
-      setConfig(result.config);
-      setAvailableProviders(result.available_providers);
-      setSelectedCouncil(result.config.council_models || []);
-      setSelectedChairman(result.config.chairman_model || '');
+      const [configResult, recommendedResult] = await Promise.all([
+        api.getConfig(),
+        api.getRecommendedModels(),
+      ]);
+
+      const currentCouncilModels = configResult.config.council_models || [];
+      setConfig(configResult.config);
+      setAvailableProviders(configResult.available_providers);
+      setSelectedCouncil(currentCouncilModels);
+      setSelectedChairman(configResult.config.chairman_model || '');
+
+      // Merge recommended models with current council models
+      const recommendedIds = new Set(recommendedResult.models.map(m => m.id));
+      const allModels = [...recommendedResult.models];
+
+      // Add current council models that are not in recommended list
+      currentCouncilModels.forEach(modelId => {
+        if (!recommendedIds.has(modelId)) {
+          allModels.push({
+            id: modelId,
+            name: modelId // Use ID as name for custom models
+          });
+        }
+      });
+
+      setRecommendedModels(allModels);
     } catch (error) {
       console.error('Failed to load config:', error);
     } finally {
@@ -73,15 +95,6 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
     });
   };
 
-  const presetModels = [
-    { id: 'ollama/deepseek-r1:1.5b', name: 'DeepSeek-R1 (1.5B, Ollama)' },
-    { id: 'ollama/qwen3:1.7b', name: 'Qwen3 (1.7B, Ollama)' },
-    { id: 'openrouter/openai/gpt-4o', name: 'GPT-4o (OpenAI)' },
-    { id: 'openrouter/anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet' },
-    { id: 'openrouter/google/gemini-2.5-pro', name: 'Gemini 2.5 Pro' },
-    { id: 'openrouter/meta-llama/llama-3.1-8b', name: 'Llama 3.1 (8B)' },
-  ];
-
   return (
     <div className="model-selector-overlay">
       <div className="model-selector">
@@ -101,7 +114,7 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
               <div className="models-section">
                 <h2>Quick Select - Popular Models</h2>
                 <div className="preset-models">
-                  {presetModels.map((model) => (
+                  {recommendedModels.map((model) => (
                     <div key={model.id} className="preset-model-card">
                       <label className="checkbox-wrapper">
                         <input
@@ -135,7 +148,7 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
                     type="text"
                     value={newModelInput}
                     onChange={(e) => setNewModelInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addNewModel()}
+                    onKeyDown={(e) => e.key === 'Enter' && addNewModel()}
                     placeholder="Enter model ID (e.g., ollama/llama2)"
                   />
                   <button onClick={addNewModel} className="add-model-btn">

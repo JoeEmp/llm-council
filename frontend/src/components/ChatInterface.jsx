@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Stage1 from './Stage1';
@@ -10,6 +10,8 @@ export default function ChatInterface({
   conversation,
   onSendMessage,
   isLoading,
+  onStopGeneration,
+  onRegenerate,
 }) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
@@ -21,6 +23,17 @@ export default function ChatInterface({
   useEffect(() => {
     scrollToBottom();
   }, [conversation]);
+
+  // Check if we should show regenerate button
+  const canRegenerate = useMemo(() => {
+    if (!conversation || conversation.messages.length === 0) {
+      return false;
+    }
+
+    const lastMsg = conversation.messages[conversation.messages.length - 1];
+    // Can regenerate if last message is user message and we're not loading
+    return lastMsg.role === 'user' && !isLoading;
+  }, [conversation, isLoading]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -115,6 +128,25 @@ export default function ChatInterface({
           <div className="loading-indicator">
             <div className="spinner"></div>
             <span>Consulting the council...</span>
+            <button
+              className="stop-button"
+              onClick={onStopGeneration}
+              title="Stop generation"
+            >
+              Stop
+            </button>
+          </div>
+        )}
+
+        {canRegenerate && (
+          <div className="regenerate-container">
+            <button
+              className="regenerate-button"
+              onClick={onRegenerate}
+              title="Regenerate response"
+            >
+              ↻ Regenerate
+            </button>
           </div>
         )}
 

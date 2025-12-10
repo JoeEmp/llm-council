@@ -5,7 +5,7 @@ import './Collapsible.css';
 
 export default function Collapsible({
   children,
-  title = '思考过程',
+  title = 'think',
   defaultExpanded = false,
   className = '',
   contentClassName = '',

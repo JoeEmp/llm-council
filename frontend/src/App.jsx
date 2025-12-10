@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatInterface from './components/ChatInterface';
 import ConfigPanel from './components/ConfigPanel';
@@ -14,6 +14,10 @@ function App() {
   const [configPanelOpen, setConfigPanelOpen] = useState(false);
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [skipModelSelector, setSkipModelSelector] = useState(false);
+
+  // For stopping message generation
+  const abortControllerRef = useRef(null);
+  const lastMessageRef = useRef(''); // Store the last sent message content
 
   // Load conversations on mount
   useEffect(() => {
@@ -86,10 +90,38 @@ function App() {
     setCurrentConversationId(id);
   };
 
+  const handleDeleteConversation = async (conversationId) => {
+    try {
+      // Delete from backend
+      await api.deleteConversation(conversationId);
+
+      // Optimistically update conversations list by filtering out the deleted one
+      setConversations(prev => prev.filter(conv => conv.id !== conversationId));
+
+      // Check if we deleted the current conversation
+      if (currentConversationId === conversationId) {
+        // Clear current conversation selection and show welcome screen
+        setCurrentConversationId(null);
+        setCurrentConversation(null);
+      }
+    } catch (error) {
+      console.error('Failed to delete conversation:', error);
+      alert('Failed to delete conversation');
+      // If delete failed, reload from backend to ensure consistency
+      await loadConversations();
+    }
+  };
+
   const handleSendMessage = async (content) => {
     if (!currentConversationId) return;
 
+    // Store the message content for potential regeneration
+    lastMessageRef.current = content;
+
+    // Create a new AbortController for this request
+    abortControllerRef.current = new AbortController();
     setIsLoading(true);
+
     try {
       // Optimistically add user message to UI
       const userMessage = { role: 'user', content };
@@ -119,97 +151,141 @@ function App() {
       }));
 
       // Send message with streaming
-      await api.sendMessageStream(currentConversationId, content, (eventType, event) => {
-        switch (eventType) {
-          case 'stage1_start':
-            setCurrentConversation((prev) => {
-              const messages = [...prev.messages];
-              const lastMsg = messages[messages.length - 1];
-              lastMsg.loading.stage1 = true;
-              return { ...prev, messages };
-            });
-            break;
+      await api.sendMessageStream(
+        currentConversationId,
+        content,
+        (eventType, event) => {
+          switch (eventType) {
+            case 'stage1_start':
+              setCurrentConversation((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                lastMsg.loading.stage1 = true;
+                return { ...prev, messages };
+              });
+              break;
 
-          case 'stage1_complete':
-            setCurrentConversation((prev) => {
-              const messages = [...prev.messages];
-              const lastMsg = messages[messages.length - 1];
-              lastMsg.stage1 = event.data;
-              lastMsg.loading.stage1 = false;
-              return { ...prev, messages };
-            });
-            break;
+            case 'stage1_complete':
+              setCurrentConversation((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                lastMsg.stage1 = event.data;
+                lastMsg.loading.stage1 = false;
+                return { ...prev, messages };
+              });
+              break;
 
-          case 'stage2_start':
-            setCurrentConversation((prev) => {
-              const messages = [...prev.messages];
-              const lastMsg = messages[messages.length - 1];
-              lastMsg.loading.stage2 = true;
-              return { ...prev, messages };
-            });
-            break;
+            case 'stage2_start':
+              setCurrentConversation((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                lastMsg.loading.stage2 = true;
+                return { ...prev, messages };
+              });
+              break;
 
-          case 'stage2_complete':
-            setCurrentConversation((prev) => {
-              const messages = [...prev.messages];
-              const lastMsg = messages[messages.length - 1];
-              lastMsg.stage2 = event.data;
-              lastMsg.metadata = event.metadata;
-              lastMsg.loading.stage2 = false;
-              return { ...prev, messages };
-            });
-            break;
+            case 'stage2_complete':
+              setCurrentConversation((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                lastMsg.stage2 = event.data;
+                lastMsg.metadata = event.metadata;
+                lastMsg.loading.stage2 = false;
+                return { ...prev, messages };
+              });
+              break;
 
-          case 'stage3_start':
-            setCurrentConversation((prev) => {
-              const messages = [...prev.messages];
-              const lastMsg = messages[messages.length - 1];
-              lastMsg.loading.stage3 = true;
-              return { ...prev, messages };
-            });
-            break;
+            case 'stage3_start':
+              setCurrentConversation((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                lastMsg.loading.stage3 = true;
+                return { ...prev, messages };
+              });
+              break;
 
-          case 'stage3_complete':
-            setCurrentConversation((prev) => {
-              const messages = [...prev.messages];
-              const lastMsg = messages[messages.length - 1];
-              lastMsg.stage3 = event.data;
-              lastMsg.loading.stage3 = false;
-              return { ...prev, messages };
-            });
-            break;
+            case 'stage3_complete':
+              setCurrentConversation((prev) => {
+                const messages = [...prev.messages];
+                const lastMsg = messages[messages.length - 1];
+                lastMsg.stage3 = event.data;
+                lastMsg.loading.stage3 = false;
+                return { ...prev, messages };
+              });
+              break;
 
-          case 'title_complete':
-            // Reload conversations to get updated title
-            loadConversations();
-            break;
+            case 'title_complete':
+              // Reload conversations to get updated title
+              loadConversations();
+              break;
 
-          case 'complete':
-            // Stream complete, reload conversations list and current conversation
-            loadConversations();
-            if (currentConversationId) {
-              loadConversation(currentConversationId);
-            }
-            setIsLoading(false);
-            break;
+            case 'complete':
+              // Stream complete, reload conversations list and current conversation
+              loadConversations();
+              if (currentConversationId) {
+                loadConversation(currentConversationId);
+              }
+              setIsLoading(false);
+              abortControllerRef.current = null;
+              break;
 
-          case 'error':
-            console.error('Stream error:', event.message);
-            setIsLoading(false);
-            break;
+            case 'error':
+              console.error('Stream error:', event.message);
+              setIsLoading(false);
+              abortControllerRef.current = null;
+              break;
 
-          default:
-            console.log('Unknown event type:', eventType);
-        }
-      });
+            default:
+              console.log('Unknown event type:', eventType);
+          }
+        },
+        abortControllerRef.current.signal
+      );
     } catch (error) {
       console.error('Failed to send message:', error);
-      // Remove optimistic messages on error
-      setCurrentConversation((prev) => ({
-        ...prev,
-        messages: prev.messages.slice(0, -2),
-      }));
+
+      // Check if this was a user cancellation (AbortError)
+      if (error.name === 'AbortError') {
+        console.log('Message generation was cancelled by user');
+        // Remove the partial assistant message
+        setCurrentConversation((prev) => ({
+          ...prev,
+          messages: prev.messages.slice(0, -1),
+        }));
+      } else {
+        // Remove optimistic messages on error
+        setCurrentConversation((prev) => ({
+          ...prev,
+          messages: prev.messages.slice(0, -2),
+        }));
+      }
       setIsLoading(false);
+      abortControllerRef.current = null;
+    }
+  };
+
+  const handleStopGeneration = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setIsLoading(false);
+
+      // Remove the partial assistant message but keep the user message for regeneration
+      setCurrentConversation((prev) => {
+        if (!prev || prev.messages.length === 0) return prev;
+        const lastMsg = prev.messages[prev.messages.length - 1];
+        if (lastMsg.role === 'assistant' && lastMsg.loading) {
+          return { ...prev, messages: prev.messages.slice(0, -1) };
+        }
+        return prev;
+      });
+    }
+  };
+
+  const handleRegenerate = () => {
+    // Resend the last message
+    if (lastMessageRef.current && currentConversationId) {
+      handleSendMessage(lastMessageRef.current);
     }
   };
 
@@ -231,11 +307,15 @@ function App() {
             currentConversationId={currentConversationId}
             onSelectConversation={handleSelectConversation}
             onNewConversation={handleStartNewConversation}
+            onDeleteConversation={handleDeleteConversation}
           />
           <ChatInterface
             conversation={currentConversation}
             onSendMessage={handleSendMessage}
             isLoading={isLoading}
+            onStopGeneration={handleStopGeneration}
+            onRegenerate={handleRegenerate}
+            lastMessage={lastMessageRef.current}
           />
 
           {/* Config Button */}

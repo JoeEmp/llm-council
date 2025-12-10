@@ -109,6 +109,10 @@ MODEL_CONFIGS = {
         "api_key": os.getenv("DEEPSEEK_API_KEY"),
         "base_url": os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"),
     },
+    "moonshot": {
+        "api_key": os.getenv("MOONSHOT_API_KEY"),
+        "base_url": os.getenv("MOONSHOT_BASE_URL", "https://api.moonshot.cn/v1"),
+    },
     "ollama": {
         "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
     },
@@ -141,6 +145,25 @@ def get_all_config() -> Dict[str, Any]:
 def update_config(config_dict: Dict[str, Any]):
     """Update configuration."""
     _config_manager.update_config(config_dict)
+
+
+# ============================================================================
+# Recommended Model Presets
+# ============================================================================
+
+RECOMMENDED_MODELS = [
+    {"id": "ollama/deepseek-r1:1.5b", "name": "DeepSeek-R1 (1.5B, Ollama)"},
+    {"id": "ollama/qwen3:1.7b", "name": "Qwen3 (1.7B, Ollama)"},
+    {"id": "openrouter/openai/gpt-4o", "name": "GPT-4o (OpenAI via OpenRouter)"},
+    {"id": "openrouter/anthropic/claude-3.5-sonnet", "name": "Claude 3.5 Sonnet (Anthropic)"},
+    {"id": "openrouter/google/gemini-2.5-pro", "name": "Gemini 2.5 Pro (Google)"},
+    {"id": "moonshot/moonshot-v1-8k", "name": "Moonshot-v1-8k (月之暗面)"},
+    {"id": "openrouter/meta-llama/llama-3.1-8b", "name": "Llama 3.1 (8B)"},
+]
+
+def get_recommended_models():
+    """Get list of recommended model presets."""
+    return RECOMMENDED_MODELS
 
 # ============================================================================
 # Legacy Static Configuration (for backward compatibility)
