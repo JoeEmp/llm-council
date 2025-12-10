@@ -1,12 +1,15 @@
 .stage2 {
-  background: #fafafa;
+  border-left: 4px solid var(--color-accent-warning);
 }
 
 .stage2 h4 {
-  margin: 20px 0 8px 0;
-  color: #333;
-  font-size: 14px;
+  margin: 24px 0 12px 0;
+  color: var(--color-text-primary);
+  font-size: 16px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .stage2 h4:first-of-type {
@@ -14,153 +17,203 @@
 }
 
 .stage-description {
-  margin: 0 0 12px 0;
-  color: #666;
-  font-size: 13px;
-  line-height: 1.5;
+  margin: 0 0 16px 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--color-bg-tertiary);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-accent-warning);
 }
 
 .aggregate-rankings {
-  background: #f0f7ff;
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  border: 2px solid #d0e7ff;
+  background: var(--color-bg-tertiary);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+  border: 1px solid var(--color-border-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .aggregate-rankings h4 {
-  margin: 0 0 12px 0;
-  color: #2a7ae2;
-  font-size: 15px;
+  margin: 0 0 16px 0;
+  color: var(--color-text-accent);
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .aggregate-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .aggregate-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px;
-  background: #ffffff;
-  border-radius: 6px;
-  border: 1px solid #d0e7ff;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-primary);
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.aggregate-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .rank-position {
-  color: #2a7ae2;
+  background: var(--color-accent-primary);
+  color: #fff;
   font-weight: 700;
   font-size: 16px;
-  min-width: 35px;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.aggregate-item:nth-child(1) .rank-position {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b); /* Gold */
+}
+
+.aggregate-item:nth-child(2) .rank-position {
+  background: linear-gradient(135deg, #94a3b8, #64748b); /* Silver */
+}
+
+.aggregate-item:nth-child(3) .rank-position {
+  background: linear-gradient(135deg, #f97316, #ea580c); /* Bronze */
 }
 
 .rank-model {
   flex: 1;
-  color: #333;
-  font-family: monospace;
+  color: var(--color-text-primary);
+  font-family: 'Fira Code', monospace;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .rank-score {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 13px;
-  font-family: monospace;
+  font-family: 'Fira Code', monospace;
+  background: var(--color-bg-tertiary);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.rank-count {
+  color: var(--color-text-tertiary);
+  font-size: 12px;
+  font-style: italic;
 }
 
 .stage2 .tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
 .stage2 .tab {
-  padding: 8px 16px;
-  background: #ffffff;
-  border: 1px solid #d0d0d0;
-  border-radius: 6px 6px 0 0;
-  color: #666;
+  padding: 10px 20px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s;
+  transition: var(--transition-fast);
+  font-weight: 500;
 }
 
 .stage2 .tab:hover {
-  background: #f0f0f0;
-  color: #333;
-  border-color: #4a90e2;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  transform: translateY(-2px);
 }
 
 .stage2 .tab.active {
-  background: #ffffff;
-  color: #4a90e2;
-  border-color: #4a90e2;
-  border-bottom-color: #ffffff;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-accent);
+  border-color: var(--color-text-accent);
   font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
 }
 
 .stage2 .tab-content {
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
-  margin-bottom: 20px;
+  background: var(--color-bg-secondary);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-primary);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
 }
 
 .ranking-model {
-  color: #888;
+  color: var(--color-text-tertiary);
   font-size: 12px;
-  font-family: monospace;
-  margin-bottom: 12px;
+  font-family: 'Fira Code', monospace;
+  margin-bottom: 16px;
+  background: var(--color-bg-tertiary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  display: inline-block;
 }
 
 .ranking-content {
-  color: #333;
-  line-height: 1.6;
-  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  font-size: 15px;
 }
 
 .thinking-content {
   font-size: 0.95em;
-  color: #666;
-  border-left: 3px solid #ddd;
-  padding-left: 16px;
-  margin: 12px 0;
+  color: var(--color-text-secondary);
+  border-left: 4px solid var(--color-accent-primary);
+  padding: 16px 20px;
+  margin: 20px 0;
+  background: var(--color-bg-tertiary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic;
 }
 
 .thinking-content p {
   margin-bottom: 8px;
 }
 
-
 .parsed-ranking {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 2px solid #e0e0e0;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--color-border-primary);
 }
 
 .parsed-ranking strong {
-  color: #2a7ae2;
-  font-size: 13px;
+  color: var(--color-text-accent);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .parsed-ranking ol {
-  margin: 8px 0 0 0;
-  padding-left: 24px;
-  color: #333;
+  margin: 12px 0 0 0;
+  padding-left: 28px;
+  color: var(--color-text-primary);
 }
 
 .parsed-ranking li {
-  margin: 4px 0;
-  font-family: monospace;
-  font-size: 13px;
-}
-
-.rank-count {
-  color: #999;
-  font-size: 12px;
+  margin: 6px 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  color: var(--color-text-secondary);
 }
