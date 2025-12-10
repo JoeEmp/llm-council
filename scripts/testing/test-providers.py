@@ -2,16 +2,17 @@
 
 import asyncio
 from backend.providers.factory import query_model, query_models_parallel
-from backend.config import COUNCIL_MODELS, CHAIRMAN_MODEL
+from backend.config import get_council_models, get_chairman_model
 
 
 async def test_single_model():
     """Test querying a single model."""
     messages = [{"role": "user", "content": "Say 'Hello from test'"}]
+    chairman_model = get_chairman_model()
 
-    print(f"Testing single model query: {CHAIRMAN_MODEL}")
+    print(f"Testing single model query: {chairman_model}")
     try:
-        result = await query_model(CHAIRMAN_MODEL, messages, timeout=10.0)
+        result = await query_model(chairman_model, messages, timeout=10.0)
         if result:
             print(f"✓ Success! Response: {result['content'][:100]}...")
         else:
@@ -23,15 +24,16 @@ async def test_single_model():
 async def test_parallel_models():
     """Test querying multiple models in parallel."""
     messages = [{"role": "user", "content": "Say 'Hello from test'"}]
+    council_models = get_council_models()
 
     print(f"\nTesting parallel queries to all council models:")
-    for model in COUNCIL_MODELS:
+    for model in council_models:
         print(f"  - {model}")
 
     try:
-        results = await query_models_parallel(COUNCIL_MODELS, messages)
+        results = await query_models_parallel(council_models, messages)
         success_count = sum(1 for r in results.values() if r is not None)
-        print(f"\n✓ Results: {success_count}/{len(COUNCIL_MODELS)} models responded")
+        print(f"\n✓ Results: {success_count}/{len(council_models)} models responded")
 
         for model, response in results.items():
             status = "✓" if response else "✗"

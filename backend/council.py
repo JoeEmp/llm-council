@@ -1,8 +1,12 @@
 """3-stage LLM Council orchestration."""
 
+import logging
 from typing import List, Dict, Any, Tuple
 from .providers.factory import query_models_parallel, query_model
 from .config import get_council_models, get_chairman_model
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 async def stage1_collect_responses(messages: List[Dict[str, str]]) -> List[Dict[str, Any]]:
@@ -15,18 +19,26 @@ async def stage1_collect_responses(messages: List[Dict[str, str]]) -> List[Dict[
     Returns:
         List of dicts with 'model' and 'response' keys
     """
+    council_models = get_council_models()
+    logger.info(f"Stage 1: Querying {len(council_models)} models: {council_models}")
+
     # Query all models in parallel with full conversation history
-    responses = await query_models_parallel(get_council_models(), messages)
+    responses = await query_models_parallel(council_models, messages)
 
     # Format results
     stage1_results = []
+    successful_count = 0
     for model, response in responses.items():
         if response is not None:  # Only include successful responses
             stage1_results.append({
                 "model": model,
                 "response": response.get('content', '')
             })
+            successful_count += 1
+        else:
+            logger.warning(f"Stage 1: Model {model} failed to respond")
 
+    logger.info(f"Stage 1: {successful_count}/{len(council_models)} models responded successfully")
     return stage1_results
 
 
@@ -201,10 +213,14 @@ def parse_ranking_from_text(ranking_text: str) -> List[str]:
     """
     import re
 
-    # Look for "FINAL RANKING:" section
-    if "FINAL RANKING:" in ranking_text:
+    # Remove think blocks first to avoid parsing responses mentioned in thinking
+    # This prevents duplicates when model discusses responses in its thinking process
+    cleaned_text = re.sub(r'<think>[\s\S]*?</think>', '', ranking_text)
+
+    # Look for "FINAL RANKING:" section in cleaned text
+    if "FINAL RANKING:" in cleaned_text:
         # Extract everything after "FINAL RANKING:"
-        parts = ranking_text.split("FINAL RANKING:")
+        parts = cleaned_text.split("FINAL RANKING:")
         if len(parts) >= 2:
             ranking_section = parts[1]
             # Try to extract numbered list format (e.g., "1. Response A")
@@ -218,8 +234,8 @@ def parse_ranking_from_text(ranking_text: str) -> List[str]:
             matches = re.findall(r'Response [A-Z]', ranking_section)
             return matches
 
-    # Fallback: try to find any "Response X" patterns in order
-    matches = re.findall(r'Response [A-Z]', ranking_text)
+    # Fallback: try to find any "Response X" patterns in order (from cleaned text)
+    matches = re.findall(r'Response [A-Z]', cleaned_text)
     return matches
 
 
@@ -289,8 +305,8 @@ Title:"""
 
     messages = [{"role": "user", "content": title_prompt}]
 
-    # Use gemini-2.5-flash for title generation (fast and cheap)
-    response = await query_model("google/gemini-2.5-flash", messages, timeout=30.0)
+    # Use the chairman model for title generation (reliable and likely to have API)
+    response = await query_model(get_chairman_model(), messages, timeout=30.0)
 
     if response is None:
         # Fallback to a generic title

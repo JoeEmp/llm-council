@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "LLM Council"
+  },
+  "chat": {
+    "welcome": "Welcome to LLM Council",
+    "create_new": "Create a new conversation to get started",
+    "start_conversation": "Start a conversation",
+    "ask_question": "Ask a question to consult the LLM Council",
+    "you": "You",
+    "llm_council": "LLM Council",
+    "stage1_loading": "Running Stage 1: Collecting individual responses...",
+    "stage2_loading": "Running Stage 2: Peer rankings...",
+    "stage3_loading": "Running Stage 3: Final synthesis...",
+    "consulting_council": "Consulting the council...",
+    "stop": "Stop",
+    "stop_generation": "Stop generation",
+    "regenerate": "↻ Regenerate",
+    "regenerate_response": "Regenerate response",
+    "input_placeholder": "Ask your question... (Shift+Enter for new line, Enter to send)",
+    "send": "Send"
+  },
+  "stage1": {
+    "title": "Stage 1: Individual Responses",
+    "thinking": "think"
+  },
+  "stage2": {
+    "title": "Stage 2: Peer Rankings",
+    "raw_evaluations": "Raw Evaluations",
+    "description": "Each model evaluated all responses (anonymized as Response A, B, C, etc.) and provided rankings.",
+    "aggregate_description": "Below, model names are shown in bold for readability, but the original evaluation used anonymous labels.",
+    "extracted_ranking": "Extracted Ranking:",
+    "aggregate_rankings": "Aggregate Rankings (Street Cred)",
+    "aggregate_description2": "Combined results across all peer evaluations (lower score is better):",
+    "average": "Avg:",
+    "votes": "votes"
+  },
+  "stage3": {
+    "title": "Stage 3: Final Council Answer",
+    "waiting": "Waiting for final response..."
+  },
+  "sidebar": {
+    "title": "LLM Council",
+    "new_conversation": "+ New Conversation",
+    "no_conversations": "No conversations yet",
+    "messages": "messages",
+    "delete_conversation": "Delete conversation",
+    "delete_confirm": "Are you sure you want to delete this conversation?"
+  },
+  "configPanel": {
+    "title": "Model Configuration",
+    "load_error": "Failed to load configuration",
+    "update_success": "Configuration updated successfully! Changes will take effect on the next request.",
+    "update_error": "Failed to update configuration",
+    "loading": "Loading configuration...",
+    "council_models": "Council Models",
+    "council_description": "Models that participate in the council and provide individual responses",
+    "model_placeholder": "provider/model",
+    "remove_model": "Remove model",
+    "add_model": "Add Model",
+    "add_model_placeholder": "Add new model (e.g., ollama/llama2)",
+    "chairman_model": "Chairman Model",
+    "chairman_description": "Model that synthesizes the final response based on all council responses",
+    "available_providers": "Available Providers:",
+    "format_help": "Format: provider/model (e.g., openrouter/openai/gpt-4o)",
+    "save_changes": "Save Changes",
+    "add": "add",
+    "cancel": "Cancel"
+  },
+  "modelSelector": {
+    "title": "Select Models for Discussion",
+    "subtitle": "Choose which models will participate in the council and which will be the chairman",
+    "select_council": "Please select at least one council model",
+    "select_chairman": "Please select a chairman model",
+    "load_error": "Failed to load models",
+    "loading": "Loading models...",
+    "quick_select": "Quick Select - Popular Models",
+    "chairman": "Chairman",
+    "remove_model": "Remove model",
+    "model_placeholder": "Enter model ID (e.g., ollama/llama2)",
+    "add_model": "Add Model",
+    "selected_models": "Selected Models",
+    "not_selected": "Not selected",
+    "available_providers": "Available Providers:",
+    "format_help": "Format: provider/model (e.g., openrouter/openai/gpt-4o)",
+    "council_members": "Council Members:",
+    "cancel": "Cancel",
+    "start_discussion": "Start Discussion",
+    "custom_model": "Custom Model"
+  },
+  "errors": {
+    "failed_delete": "Failed to delete conversation",
+    "failed_list_conversations": "Failed to list conversations",
+    "failed_create_conversation": "Failed to create conversation",
+    "failed_get_conversation": "Failed to get conversation",
+    "failed_send_message": "Failed to send message",
+    "failed_get_config": "Failed to get configuration",
+    "failed_update_config": "Failed to update configuration",
+    "failed_get_models": "Failed to get recommended models"
+  },
+  "api_status": {
+    "conversation_not_found": "Conversation not found",
+    "generation_stopped": "Generation was stopped by user before completion.",
+    "delete_success": "Conversation deleted successfully",
+    "config_updated": "Configuration updated successfully",
+    "config_update_failed": "Failed to update config: {{error}}"
+  }
+}

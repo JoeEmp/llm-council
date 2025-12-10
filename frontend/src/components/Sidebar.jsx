@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './Sidebar.css';
 
 export default function Sidebar({
@@ -8,9 +9,11 @@ export default function Sidebar({
   onNewConversation,
   onDeleteConversation,
 }) {
+  const { t } = useTranslation();
+
   const handleDelete = (e, conversationId) => {
     e.stopPropagation();
-    if (confirm('Are you sure you want to delete this conversation?')) {
+    if (confirm(t('sidebar.delete_confirm'))) {
       onDeleteConversation(conversationId);
     }
   };
@@ -18,15 +21,15 @@ export default function Sidebar({
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h1>LLM Council</h1>
+        <h1>{t('sidebar.title')}</h1>
         <button className="new-conversation-btn" onClick={onNewConversation}>
-          + New Conversation
+          + {t('sidebar.new_conversation')}
         </button>
       </div>
 
       <div className="conversation-list">
         {conversations.length === 0 ? (
-          <div className="no-conversations">No conversations yet</div>
+          <div className="no-conversations">{t('sidebar.no_conversations')}</div>
         ) : (
           conversations.map((conv) => (
             <div
@@ -38,16 +41,16 @@ export default function Sidebar({
             >
               <div className="conversation-info">
                 <div className="conversation-title">
-                  {conv.title || 'New Conversation'}
+                  {conv.title || t('sidebar.new_conversation')}
                 </div>
                 <div className="conversation-meta">
-                  {conv.message_count} messages
+                  {conv.message_count} {t('sidebar.messages')}
                 </div>
               </div>
               <button
                 className="delete-conversation-btn"
                 onClick={(e) => handleDelete(e, conv.id)}
-                title="Delete conversation"
+                title={t('sidebar.delete_conversation')}
               >
                 ✕
               </button>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './Collapsible.css';
@@ -10,6 +11,7 @@ export default function Collapsible({
   className = '',
   contentClassName = '',
 }) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   const toggle = () => {
@@ -27,7 +29,7 @@ export default function Collapsible({
         <span className="collapsible-icon">
           {isExpanded ? '▼' : '▶'}
         </span>
-        <span className="collapsible-title">{title}</span>
+        <span className="collapsible-title">{title === 'think' ? t('thinking') : title}</span>
       </button>
       <div
         className={`collapsible-content ${contentClassName}`}

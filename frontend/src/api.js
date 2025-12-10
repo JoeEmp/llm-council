@@ -1,6 +1,7 @@
 /**
  * API client for the LLM Council backend.
  */
+import i18n from './i18n';
 
 const API_BASE = 'http://localhost:8002';
 
@@ -11,7 +12,7 @@ export const api = {
   async listConversations() {
     const response = await fetch(`${API_BASE}/api/conversations`);
     if (!response.ok) {
-      throw new Error('Failed to list conversations');
+      throw new Error(i18n.t('errors.failed_list_conversations'));
     }
     return response.json();
   },
@@ -28,7 +29,7 @@ export const api = {
       body: JSON.stringify({}),
     });
     if (!response.ok) {
-      throw new Error('Failed to create conversation');
+      throw new Error(i18n.t('errors.failed_create_conversation'));
     }
     return response.json();
   },
@@ -41,7 +42,7 @@ export const api = {
       `${API_BASE}/api/conversations/${conversationId}`
     );
     if (!response.ok) {
-      throw new Error('Failed to get conversation');
+      throw new Error(i18n.t('errors.failed_get_conversation'));
     }
     return response.json();
   },
@@ -86,7 +87,7 @@ export const api = {
     );
 
     if (!response.ok) {
-      throw new Error('Failed to send message');
+      throw new Error(i18n.t('errors.failed_send_message'));
     }
 
     const reader = response.body.getReader();
@@ -106,7 +107,7 @@ export const api = {
             const event = JSON.parse(data);
             onEvent(event.type, event);
           } catch (e) {
-            console.error('Failed to parse SSE event:', e);
+            console.error(i18n.t('errors.failed_parse_sse'), e);
           }
         }
       }
@@ -119,7 +120,7 @@ export const api = {
   async getConfig() {
     const response = await fetch(`${API_BASE}/api/config`);
     if (!response.ok) {
-      throw new Error('Failed to get configuration');
+      throw new Error(i18n.t('errors.failed_get_config'));
     }
     return response.json();
   },
@@ -137,7 +138,7 @@ export const api = {
       body: JSON.stringify(config),
     });
     if (!response.ok) {
-      throw new Error('Failed to update configuration');
+      throw new Error(i18n.t('errors.failed_update_config'));
     }
     return response.json();
   },
@@ -154,7 +155,7 @@ export const api = {
       }
     );
     if (!response.ok) {
-      throw new Error('Failed to delete conversation');
+      throw new Error(i18n.t('errors.failed_delete_conversation'));
     }
     return response.json();
   },
@@ -165,7 +166,7 @@ export const api = {
   async getRecommendedModels() {
     const response = await fetch(`${API_BASE}/api/models/recommended`);
     if (!response.ok) {
-      throw new Error('Failed to get recommended models');
+      throw new Error(i18n.t('errors.failed_get_recommended_models'));
     }
     return response.json();
   },

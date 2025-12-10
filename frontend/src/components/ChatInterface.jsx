@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Stage1 from './Stage1';
@@ -13,6 +14,7 @@ export default function ChatInterface({
   onStopGeneration,
   onRegenerate,
 }) {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
 
@@ -55,8 +57,8 @@ export default function ChatInterface({
     return (
       <div className="chat-interface">
         <div className="empty-state">
-          <h2>Welcome to LLM Council</h2>
-          <p>Create a new conversation to get started</p>
+          <h2>{t('chat.welcome')}</h2>
+          <p>{t('chat.create_new')}</p>
         </div>
       </div>
     );
@@ -67,15 +69,15 @@ export default function ChatInterface({
       <div className="messages-container">
         {conversation.messages.length === 0 ? (
           <div className="empty-state">
-            <h2>Start a conversation</h2>
-            <p>Ask a question to consult the LLM Council</p>
+            <h2>{t('chat.start_conversation')}</h2>
+            <p>{t('chat.ask_question')}</p>
           </div>
         ) : (
           conversation.messages.map((msg, index) => (
             <div key={index} className="message-group">
               {msg.role === 'user' ? (
                 <div className="user-message">
-                  <div className="message-label">You</div>
+                  <div className="message-label">{t('chat.you')}</div>
                   <div className="message-content">
                     <div className="markdown-content">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
@@ -84,13 +86,13 @@ export default function ChatInterface({
                 </div>
               ) : (
                 <div className="assistant-message">
-                  <div className="message-label">LLM Council</div>
+                  <div className="message-label">{t('chat.llm_council')}</div>
 
                   {/* Stage 1 */}
                   {msg.loading?.stage1 && (
                     <div className="stage-loading">
                       <div className="spinner"></div>
-                      <span>Running Stage 1: Collecting individual responses...</span>
+                      <span>{t('chat.stage1_loading')}</span>
                     </div>
                   )}
                   {msg.stage1 && <Stage1 responses={msg.stage1} />}
@@ -99,7 +101,7 @@ export default function ChatInterface({
                   {msg.loading?.stage2 && (
                     <div className="stage-loading">
                       <div className="spinner"></div>
-                      <span>Running Stage 2: Peer rankings...</span>
+                      <span>{t('chat.stage2_loading')}</span>
                     </div>
                   )}
                   {msg.stage2 && (
@@ -114,7 +116,7 @@ export default function ChatInterface({
                   {msg.loading?.stage3 && (
                     <div className="stage-loading">
                       <div className="spinner"></div>
-                      <span>Running Stage 3: Final synthesis...</span>
+                      <span>{t('chat.stage3_loading')}</span>
                     </div>
                   )}
                   {msg.stage3 && <Stage3 finalResponse={msg.stage3} />}
@@ -127,13 +129,13 @@ export default function ChatInterface({
         {isLoading && (
           <div className="loading-indicator">
             <div className="spinner"></div>
-            <span>Consulting the council...</span>
+            <span>{t('chat.consulting_council')}</span>
             <button
               className="stop-button"
               onClick={onStopGeneration}
-              title="Stop generation"
+              title={t('chat.stop_generation')}
             >
-              Stop
+              {t('chat.stop')}
             </button>
           </div>
         )}
@@ -143,9 +145,9 @@ export default function ChatInterface({
             <button
               className="regenerate-button"
               onClick={onRegenerate}
-              title="Regenerate response"
+              title={t('chat.regenerate_response')}
             >
-              ↻ Regenerate
+              ↻ {t('chat.regenerate')}
             </button>
           </div>
         )}
@@ -156,7 +158,7 @@ export default function ChatInterface({
       <form className="input-form" onSubmit={handleSubmit}>
         <textarea
           className="message-input"
-          placeholder="Ask your question... (Shift+Enter for new line, Enter to send)"
+          placeholder={t('chat.input_placeholder')}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -168,7 +170,7 @@ export default function ChatInterface({
           className="send-button"
           disabled={!input.trim() || isLoading}
         >
-          Send
+          {t('chat.send')}
         </button>
       </form>
     </div>

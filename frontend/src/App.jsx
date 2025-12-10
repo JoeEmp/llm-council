@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Sidebar from './components/Sidebar';
 import ChatInterface from './components/ChatInterface';
 import ConfigPanel from './components/ConfigPanel';
 import ModelSelector from './components/ModelSelector';
+import LanguageSelector from './components/LanguageSelector';
 import { api } from './api';
 import './App.css';
 
 function App() {
+  const { t } = useTranslation();
   const [conversations, setConversations] = useState([]);
   const [currentConversationId, setCurrentConversationId] = useState(null);
   const [currentConversation, setCurrentConversation] = useState(null);
@@ -106,7 +109,7 @@ function App() {
       }
     } catch (error) {
       console.error('Failed to delete conversation:', error);
-      alert('Failed to delete conversation');
+      alert(t('errors.failed_delete'));
       // If delete failed, reload from backend to ensure consistency
       await loadConversations();
     }
@@ -318,18 +321,21 @@ function App() {
             lastMessage={lastMessageRef.current}
           />
 
-          {/* Config Button */}
-          <button
-            className="config-button"
-            onClick={() => setConfigPanelOpen(true)}
-            title="Configure Models"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m20.5-4.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"></path>
-            </svg>
-            Config
-          </button>
+          {/* Language Selector and Config Button */}
+          <div className="header-actions">
+            <LanguageSelector />
+            <button
+              className="config-button"
+              onClick={() => setConfigPanelOpen(true)}
+              title="Configure Models"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m20.5-4.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"></path>
+              </svg>
+              Config
+            </button>
+          </div>
 
           {/* Config Panel */}
           <ConfigPanel

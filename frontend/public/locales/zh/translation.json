@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "LLM 议事厅"
+  },
+  "chat": {
+    "welcome": "欢迎使用 LLM 议事厅",
+    "create_new": "创建新对话开始使用",
+    "start_conversation": "开始对话",
+    "ask_question": "提出问题以咨询 LLM 议事厅",
+    "you": "您",
+    "llm_council": "议事厅",
+    "stage1_loading": "正在运行第 1 阶段：收集各个模型的回应...",
+    "stage2_loading": "正在运行第 2 阶段：同行评分...",
+    "stage3_loading": "正在运行第 3 阶段：最终综合...",
+    "consulting_council": "咨询议事厅中...",
+    "stop": "停止",
+    "stop_generation": "停止生成",
+    "regenerate": "↻ 重新生成",
+    "regenerate_response": "重新生成回应",
+    "input_placeholder": "输入您的问题... (Shift+Enter换行，Enter发送)",
+    "send": "发送"
+  },
+  "stage1": {
+    "title": "第 1 阶段：各个模型的回应",
+    "thinking": "思考"
+  },
+  "stage2": {
+    "title": "第 2 阶段：同行评分",
+    "raw_evaluations": "原始评估",
+    "description": "每个模型评估了所有回应（匿名显示为响应 A、B、C 等）并提供排名。",
+    "aggregate_description": "下文中的模型名称以粗体显示，便于阅读，但原始评估使用的是匿名标签。",
+    "extracted_ranking": "提取的排名：",
+    "aggregate_rankings": "综合评分 (Street Cred)",
+    "aggregate_description2": "汇总所有同行评分的结果（分数越低越好）：",
+    "average": "平均:",
+    "votes": "票"
+  },
+  "stage3": {
+    "title": "第 3 阶段：最终结论",
+    "waiting": "等待最终回应..."
+  },
+  "sidebar": {
+    "title": "LLM 议事厅",
+    "new_conversation": "+ 新建对话",
+    "no_conversations": "暂无对话",
+    "messages": "条消息",
+    "delete_conversation": "删除对话",
+    "delete_confirm": "确定要删除此对话吗？"
+  },
+  "configPanel": {
+    "title": "模型配置",
+    "load_error": "加载配置失败",
+    "update_success": "配置更新成功！更改将在下次请求时生效。",
+    "update_error": "更新配置失败",
+    "loading": "正在加载配置...",
+    "council_models": "议事模型",
+    "council_description": "参与议事并提供各自回应的模型",
+    "model_placeholder": "provider/model",
+    "remove_model": "移除模型",
+    "add_model": "添加模型",
+    "add_model_placeholder": "添加新模型（例如: ollama/llama2）",
+    "chairman_model": "主席模型",
+    "chairman_description": "基于所有议事回应综合生成最终答案的模型",
+    "available_providers": "可用提供商：",
+    "format_help": "格式: provider/model (例如: openrouter/openai/gpt-4o)",
+    "save_changes": "保存更改",
+    "add": "添加",
+    "cancel": "取消"
+  },
+  "modelSelector": {
+    "title": "选择讨论模型",
+    "subtitle": "选择哪些模型参与议事，哪个模型担任主席",
+    "select_council": "请至少选择一个议事模型",
+    "select_chairman": "请选择主席模型",
+    "load_error": "加载模型失败",
+    "loading": "正在加载模型...",
+    "quick_select": "快速选择 - 热门模型",
+    "chairman": "主席",
+    "remove_model": "移除模型",
+    "model_placeholder": "输入模型 ID (例如: ollama/llama2)",
+    "add_model": "添加模型",
+    "selected_models": "已选模型",
+    "not_selected": "未选择",
+    "available_providers": "可用提供商：",
+    "format_help": "格式: provider/model (例如: openrouter/openai/gpt-4o)",
+    "council_members": "议事成员：",
+    "cancel": "取消",
+    "start_discussion": "开始讨论",
+    "custom_model": "自定义模型"
+  },
+  "errors": {
+    "failed_delete": "删除对话失败",
+    "failed_list_conversations": "获取对话列表失败",
+    "failed_create_conversation": "创建对话失败",
+    "failed_get_conversation": "获取对话失败",
+    "failed_send_message": "发送消息失败",
+    "failed_get_config": "获取配置失败",
+    "failed_update_config": "更新配置失败",
+    "failed_get_models": "获取推荐模型失败"
+  },
+  "api_status": {
+    "conversation_not_found": "对话未找到",
+    "generation_stopped": "生成被用户中断。",
+    "delete_success": "对话删除成功",
+    "config_updated": "配置更新成功",
+    "config_update_failed": "配置更新失败: {{error}}"
+  }
+}

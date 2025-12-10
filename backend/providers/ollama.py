@@ -60,7 +60,7 @@ class OllamaProvider(ModelProvider):
                 }
 
         except Exception as e:
-            print(f"Error querying Ollama model {model}: {e}")
+            print(f"Error querying Ollama model {model}: {str(e)}")
             return None
 
     def supports_streaming(self) -> bool:

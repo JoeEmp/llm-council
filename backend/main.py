@@ -8,6 +8,7 @@ from typing import List, Dict, Any, Optional
 import uuid
 import json
 import asyncio
+import logging
 
 from . import storage
 from .council import run_full_council, generate_conversation_title, stage1_collect_responses, stage2_collect_rankings, stage3_synthesize_final, calculate_aggregate_rankings
@@ -15,6 +16,10 @@ from .config import (
     get_council_models, set_council_models, get_chairman_model,
     set_chairman_model, get_all_config, update_config, MODEL_CONFIGS
 )
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="LLM Council API")
 
@@ -96,6 +101,9 @@ async def send_message(conversation_id: str, request: SendMessageRequest):
     Send a message and run the 3-stage council process.
     Returns the complete response with all stages.
     """
+    logger.info(f"Received message for conversation {conversation_id}")
+    logger.info(f"Current council models: {get_council_models()}")
+
     # Check if conversation exists
     conversation = storage.get_conversation(conversation_id)
     if conversation is None:

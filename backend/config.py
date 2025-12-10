@@ -169,13 +169,8 @@ def get_recommended_models():
 # Legacy Static Configuration (for backward compatibility)
 # ============================================================================
 
-# These values are now dynamically managed
-# COUNCIL_MODELS = _config_manager.council_models
-# CHAIRMAN_MODEL = _config_manager.chairman_model
-
-# For backward compatibility, we'll create properties
-COUNCIL_MODELS = property(lambda self: _config_manager.council_models)
-CHAIRMAN_MODEL = property(lambda self: _config_manager.chairman_model)
+# Note: These legacy module-level variables are deprecated.
+# Use get_council_models() and get_chairman_model() functions instead.
 
 # DATA_DIR is accessed directly
 DATA_DIR = _config_manager.data_dir

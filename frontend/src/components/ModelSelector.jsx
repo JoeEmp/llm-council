@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../api';
 import './ModelSelector.css';
 
 export default function ModelSelector({ onModelsSelected, onCancel }) {
+  const { t } = useTranslation();
   const [config, setConfig] = useState(null);
   const [availableProviders, setAvailableProviders] = useState([]);
   const [recommendedModels, setRecommendedModels] = useState([]);
@@ -45,7 +47,7 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
 
       setRecommendedModels(allModels);
     } catch (error) {
-      console.error('Failed to load config:', error);
+      console.error(t('modelSelector.load_error'), error);
     } finally {
       setLoading(false);
     }
@@ -75,11 +77,11 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
 
   const handleConfirm = async () => {
     if (selectedCouncil.length === 0) {
-      alert('Please select at least one council model');
+      alert(t('modelSelector.select_council'));
       return;
     }
     if (!selectedChairman) {
-      alert('Please select a chairman model');
+      alert(t('modelSelector.select_chairman'));
       return;
     }
 
@@ -99,20 +101,20 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
     <div className="model-selector-overlay">
       <div className="model-selector">
         <div className="selector-header">
-          <h1>Select Models for Discussion</h1>
+          <h1>{t('modelSelector.title')}</h1>
           <p className="selector-subtitle">
-            Choose which models will participate in the council and which will be the chairman
+            {t('modelSelector.subtitle')}
           </p>
         </div>
 
         <div className="selector-content">
           {loading ? (
-            <div className="loading-selector">Loading models...</div>
+            <div className="loading-selector">{t('modelSelector.loading')}</div>
           ) : (
             <>
               {/* Preset Models */}
               <div className="models-section">
-                <h2>Quick Select - Popular Models</h2>
+                <h2>{t('modelSelector.quick_select')}</h2>
                 <div className="preset-models">
                   {recommendedModels.map((model) => (
                     <div key={model.id} className="preset-model-card">
@@ -133,7 +135,7 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
                           onChange={() => setSelectedChairman(model.id)}
                         />
                         <span className="radio-mark"></span>
-                        <span className="radio-label">Chairman</span>
+                        <span className="radio-label">{t('modelSelector.chairman')}</span>
                       </label>
                     </div>
                   ))}
@@ -142,17 +144,17 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
 
               {/* Custom Model */}
               <div className="models-section">
-                <h2>Custom Model</h2>
+                <h2>{t('modelSelector.custom_model')}</h2>
                 <div className="custom-model-input">
                   <input
                     type="text"
                     value={newModelInput}
                     onChange={(e) => setNewModelInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && addNewModel()}
-                    placeholder="Enter model ID (e.g., ollama/llama2)"
+                    placeholder={t('modelSelector.model_placeholder')}
                   />
                   <button onClick={addNewModel} className="add-model-btn">
-                    Add Model
+                    {t('modelSelector.add_model')}
                   </button>
                 </div>
               </div>
@@ -160,17 +162,18 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
               {/* Selected Models */}
               {selectedCouncil.length > 0 && (
                 <div className="models-section">
-                  <h2>Selected Models ({selectedCouncil.length})</h2>
+                  <h2>{t('modelSelector.selected_models', { count: selectedCouncil.length })}</h2>
                   <div className="selected-models">
                     {selectedCouncil.map((model) => (
                       <div key={model} className="selected-model">
                         <span className="model-id">{model}</span>
                         {selectedChairman === model && (
-                          <span className="chairman-badge">Chairman</span>
+                          <span className="chairman-badge">{t('modelSelector.chairman')}</span>
                         )}
                         <button
                           onClick={() => removeModel(model)}
                           className="remove-model-btn"
+                          title={t('modelSelector.remove_model')}
                         >
                           ✕
                         </button>
@@ -182,7 +185,7 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
 
               {/* Providers Info */}
               <div className="providers-info">
-                <h3>Available Providers:</h3>
+                <h3>{t('modelSelector.available_providers')}</h3>
                 <div className="provider-tags">
                   {availableProviders.map((provider) => (
                     <span key={provider} className="provider-tag">
@@ -191,20 +194,20 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
                   ))}
                 </div>
                 <p className="format-help">
-                  Format: provider/model (e.g., openrouter/openai/gpt-4o)
+                  {t('modelSelector.format_help')}
                 </p>
               </div>
 
               {/* Summary */}
               <div className="selection-summary">
                 <div className="summary-item">
-                  <span className="summary-label">Council Members:</span>
+                  <span className="summary-label">{t('modelSelector.council_members')}:</span>
                   <span className="summary-value">{selectedCouncil.length}</span>
                 </div>
                 <div className="summary-item">
-                  <span className="summary-label">Chairman:</span>
+                  <span className="summary-label">{t('modelSelector.chairman')}:</span>
                   <span className="summary-value">
-                    {selectedChairman || 'Not selected'}
+                    {selectedChairman || t('modelSelector.not_selected')}
                   </span>
                 </div>
               </div>
@@ -217,14 +220,14 @@ export default function ModelSelector({ onModelsSelected, onCancel }) {
             onClick={onCancel}
             className="cancel-button"
           >
-            Cancel
+            {t('modelSelector.cancel')}
           </button>
           <button
             onClick={handleConfirm}
             disabled={selectedCouncil.length === 0 || !selectedChairman}
             className="confirm-button"
           >
-            Start Discussion
+            {t('modelSelector.start_discussion')}
           </button>
         </div>
       </div>

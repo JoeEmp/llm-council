@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Collapsible from './Collapsible';
@@ -31,7 +32,7 @@ function ResponseWithThinking({ content }) {
 
   return (
     <>
-      <Collapsible title="think" defaultExpanded={true}>
+      <Collapsible title={t('thinking')} defaultExpanded={true}>
         <div className="thinking-content">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{thinking}</ReactMarkdown>
         </div>
@@ -42,6 +43,7 @@ function ResponseWithThinking({ content }) {
 }
 
 export default function Stage1({ responses }) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(0);
 
   if (!responses || responses.length === 0) {
@@ -50,7 +52,7 @@ export default function Stage1({ responses }) {
 
   return (
     <div className="stage stage1">
-      <h3 className="stage-title">Stage 1: Individual Responses</h3>
+      <h3 className="stage-title">{t('stage1.title')}</h3>
 
       <div className="tabs">
         {responses.map((resp, index) => (

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Collapsible from './Collapsible';
@@ -30,7 +31,7 @@ function ResponseWithThinking({ content }) {
 
   return (
     <>
-      <Collapsible title="think" defaultExpanded={true}>
+      <Collapsible title={t('thinking')} defaultExpanded={true}>
         <div className="thinking-content">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{thinking}</ReactMarkdown>
         </div>
@@ -41,22 +42,24 @@ function ResponseWithThinking({ content }) {
 }
 
 export default function Stage3({ finalResponse }) {
+  const { t } = useTranslation();
+
   if (!finalResponse) {
     return null;
   }
 
   return (
     <div className="stage stage3">
-      <h3 className="stage-title">Stage 3: Final Council Answer</h3>
+      <h3 className="stage-title">{t('stage3.title')}</h3>
       <div className="final-response">
         <div className="chairman-label">
-          Chairman: {finalResponse.model.split('/')[1] || finalResponse.model}
+          {t('stage3.chairman')}: {finalResponse.model.split('/')[1] || finalResponse.model}
         </div>
         <div className="final-text markdown-content">
           {finalResponse.response ? (
             <ResponseWithThinking content={finalResponse.response} />
           ) : (
-            <p>Waiting for final response...</p>
+            <p>{t('stage3.waiting')}</p>
           )}
         </div>
       </div>

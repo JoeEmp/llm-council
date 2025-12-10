@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../api';
 import './ConfigPanel.css';
 
 export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
+  const { t } = useTranslation();
   const [config, setConfig] = useState({ council_models: [], chairman_model: '' });
   const [availableProviders, setAvailableProviders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,8 +24,8 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
       setConfig(result.config);
       setAvailableProviders(result.available_providers);
     } catch (error) {
-      console.error('Failed to load config:', error);
-      alert('Failed to load configuration');
+      console.error(t('configPanel.load_error'), error);
+      alert(t('configPanel.load_error'))
     } finally {
       setLoading(false);
     }
@@ -37,11 +39,11 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
         chairman_model: config.chairman_model,
       });
       onConfigUpdated?.();
-      alert('Configuration updated successfully! Changes will take effect on the next request.');
+      alert(t('configPanel.update_success'));
       onClose();
     } catch (error) {
-      console.error('Failed to update config:', error);
-      alert('Failed to update configuration');
+      console.error(t('configPanel.update_error'), error);
+      alert(t('configPanel.update_error'));
     } finally {
       setSaving(false);
     }
@@ -86,7 +88,7 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
     <div className="config-modal-overlay">
       <div className="config-modal">
         <div className="config-header">
-          <h2>Model Configuration</h2>
+          <h2>{t('configPanel.title')}</h2>
           <button className="close-button" onClick={onClose}>
             ✕
           </button>
@@ -94,13 +96,13 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
 
         <div className="config-content">
           {loading ? (
-            <div className="loading">Loading configuration...</div>
+            <div className="loading">{t('configPanel.loading')}</div>
           ) : (
             <>
               <div className="config-section">
-                <h3>Council Models</h3>
+                <h3>{t('configPanel.council_models')}</h3>
                 <p className="section-description">
-                  Models that participate in the council and provide individual responses
+                  {t('configPanel.council_description')}
                 </p>
 
                 <div className="model-list">
@@ -116,7 +118,7 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
                           setConfig({ ...config, council_models: newModels });
                         }}
                         className="model-input"
-                        placeholder="provider/model"
+                        placeholder={t('configPanel.model_placeholder')}
                       />
                       <div className="model-actions">
                         <button
@@ -136,6 +138,7 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
                         <button
                           onClick={() => removeModel(index)}
                           className="remove-button"
+                          title={t('configPanel.remove_model')}
                         >
                           ✕
                         </button>
@@ -151,18 +154,18 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
                     onChange={(e) => setNewModel(e.target.value)}
                     onKeyDown={handleKeyDown}
                     className="new-model-input"
-                    placeholder="Add new model (e.g., ollama/llama2)"
+                    placeholder={t('configPanel.add_model_placeholder')}
                   />
                   <button onClick={addModel} className="add-button">
-                    Add Model
+                    {t('configPanel.add_model')}
                   </button>
                 </div>
               </div>
 
               <div className="config-section">
-                <h3>Chairman Model</h3>
+                <h3>{t('configPanel.chairman_model')}</h3>
                 <p className="section-description">
-                  Model that synthesizes the final response based on all council responses
+                  {t('configPanel.chairman_description')}
                 </p>
                 <input
                   type="text"
@@ -171,12 +174,12 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
                     setConfig({ ...config, chairman_model: e.target.value })
                   }
                   className="chairman-input"
-                  placeholder="provider/model"
+                  placeholder={t('configPanel.model_placeholder')}
                 />
               </div>
 
               <div className="config-info">
-                <h4>Available Providers:</h4>
+                <h4>{t('configPanel.available_providers')}</h4>
                 <div className="provider-list">
                   {availableProviders.map((provider) => (
                     <span key={provider} className="provider-tag">
@@ -185,7 +188,7 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
                   ))}
                 </div>
                 <p className="format-help">
-                  Format: provider/model (e.g., openrouter/openai/gpt-4o)
+                  {t('configPanel.format_help')}
                 </p>
               </div>
             </>
@@ -194,14 +197,14 @@ export default function ConfigPanel({ isOpen, onClose, onConfigUpdated }) {
 
         <div className="config-actions">
           <button onClick={onClose} className="cancel-button">
-            Cancel
+            {t('configPanel.cancel')}
           </button>
           <button
             onClick={handleUpdateConfig}
             disabled={saving || loading}
             className="save-button"
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? t('configPanel.saving') : t('configPanel.save_changes')}
           </button>
         </div>
       </div>
