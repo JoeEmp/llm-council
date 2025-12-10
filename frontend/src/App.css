@@ -113,12 +113,14 @@
 
 .start-prompt {
   text-align: center;
-  padding: 60px;
+  padding: 40px;
   background: var(--color-bg-glass);
   backdrop-filter: blur(24px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-primary);
   box-shadow: var(--shadow-xl);
+  max-width: 600px;
+  width: 90%;
 }
 
 .start-prompt h2 {

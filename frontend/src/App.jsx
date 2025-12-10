@@ -61,10 +61,7 @@ function App() {
   const handleNewConversation = async () => {
     try {
       const newConv = await api.createConversation();
-      setConversations([
-        { id: newConv.id, created_at: newConv.created_at, message_count: 0 },
-        ...conversations,
-      ]);
+      await loadConversations();
       setCurrentConversationId(newConv.id);
     } catch (error) {
       console.error('Failed to create conversation:', error);
@@ -77,6 +74,12 @@ function App() {
     setCurrentConversation(null);
     setShowModelSelector(true);
     setSkipModelSelector(false);
+  };
+
+  const handleModelSelectorCancel = () => {
+    // Close model selector and return to main app
+    setShowModelSelector(false);
+    setSkipModelSelector(true);
   };
 
   const handleSelectConversation = (id) => {
@@ -214,7 +217,10 @@ function App() {
     <div className="app">
       {/* Show Model Selector when starting new conversation or no conversation selected */}
       {showModelSelector && !skipModelSelector && (
-        <ModelSelector onModelsSelected={handleModelsSelected} />
+        <ModelSelector
+          onModelsSelected={handleModelsSelected}
+          onCancel={handleModelSelectorCancel}
+        />
       )}
 
       {/* Show main app when model selector is skipped or conversation exists */}

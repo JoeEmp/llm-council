@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { api } from '../api';
 import './ModelSelector.css';
 
-export default function ModelSelector({ onModelsSelected }) {
+export default function ModelSelector({ onModelsSelected, onCancel }) {
   const [config, setConfig] = useState(null);
   const [availableProviders, setAvailableProviders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,7 +110,7 @@ export default function ModelSelector({ onModelsSelected }) {
                           onChange={() => toggleCouncilModel(model.id)}
                         />
                         <span className="checkmark"></span>
-                        <span className="model-name">{model.name}</span>
+                        <span className="model-name" title={model.name}>{model.name}</span>
                       </label>
                       <label className="radio-wrapper">
                         <input
@@ -200,6 +200,12 @@ export default function ModelSelector({ onModelsSelected }) {
         </div>
 
         <div className="selector-actions">
+          <button
+            onClick={onCancel}
+            className="cancel-button"
+          >
+            Cancel
+          </button>
           <button
             onClick={handleConfirm}
             disabled={selectedCouncil.length === 0 || !selectedChairman}
