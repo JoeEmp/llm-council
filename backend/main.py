@@ -4,13 +4,17 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import uuid
 import json
 import asyncio
 
 from . import storage
 from .council import run_full_council, generate_conversation_title, stage1_collect_responses, stage2_collect_rankings, stage3_synthesize_final, calculate_aggregate_rankings
+from .config import (
+    get_council_models, set_council_models, get_chairman_model,
+    set_chairman_model, get_all_config, update_config, MODEL_CONFIGS
+)
 
 app = FastAPI(title="LLM Council API")
 
@@ -225,6 +229,46 @@ async def send_message_stream(conversation_id: str, request: SendMessageRequest)
             "Connection": "keep-alive",
         }
     )
+
+
+class ConfigUpdateRequest(BaseModel):
+    """Request to update configuration."""
+    council_models: Optional[List[str]] = None
+    chairman_model: Optional[str] = None
+
+
+@app.get("/api/config")
+async def get_config():
+    """Get current configuration."""
+    return {
+        "config": get_all_config(),
+        "available_providers": list(MODEL_CONFIGS.keys())
+    }
+
+
+@app.post("/api/config")
+async def update_config_endpoint(config_update: ConfigUpdateRequest):
+    """
+    Update configuration.
+    Changes take effect immediately without restart.
+    """
+    try:
+        update_dict = {}
+        if config_update.council_models is not None:
+            update_dict["council_models"] = config_update.council_models
+        if config_update.chairman_model is not None:
+            update_dict["chairman_model"] = config_update.chairman_model
+
+        if update_dict:
+            update_config(update_dict)
+
+        return {
+            "success": True,
+            "message": "Configuration updated successfully",
+            "config": get_all_config()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update config: {str(e)}")
 
 
 if __name__ == "__main__":

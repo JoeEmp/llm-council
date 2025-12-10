@@ -2,7 +2,7 @@
  * API client for the LLM Council backend.
  */
 
-const API_BASE = 'http://localhost:8001';
+const API_BASE = 'http://localhost:8002';
 
 export const api = {
   /**
@@ -111,5 +111,34 @@ export const api = {
         }
       }
     }
+  },
+
+  /**
+   * Get current configuration.
+   */
+  async getConfig() {
+    const response = await fetch(`${API_BASE}/api/config`);
+    if (!response.ok) {
+      throw new Error('Failed to get configuration');
+    }
+    return response.json();
+  },
+
+  /**
+   * Update configuration.
+   * @param {Object} config - Configuration to update
+   */
+  async updateConfig(config) {
+    const response = await fetch(`${API_BASE}/api/config`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(config),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update configuration');
+    }
+    return response.json();
   },
 };

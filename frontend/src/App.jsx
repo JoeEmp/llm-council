@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatInterface from './components/ChatInterface';
+import ConfigPanel from './components/ConfigPanel';
 import { api } from './api';
 import './App.css';
 
@@ -9,6 +10,7 @@ function App() {
   const [currentConversationId, setCurrentConversationId] = useState(null);
   const [currentConversation, setCurrentConversation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [configPanelOpen, setConfigPanelOpen] = useState(false);
 
   // Load conversations on mount
   useEffect(() => {
@@ -21,6 +23,11 @@ function App() {
       loadConversation(currentConversationId);
     }
   }, [currentConversationId]);
+
+  const handleConfigUpdated = () => {
+    // Configuration updated, could add notification here
+    console.log('Configuration updated successfully');
+  };
 
   const loadConversations = async () => {
     try {
@@ -196,6 +203,26 @@ function App() {
         conversation={currentConversation}
         onSendMessage={handleSendMessage}
         isLoading={isLoading}
+      />
+
+      {/* Config Button */}
+      <button
+        className="config-button"
+        onClick={() => setConfigPanelOpen(true)}
+        title="Configure Models"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m20.5-4.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"></path>
+        </svg>
+        Config
+      </button>
+
+      {/* Config Panel */}
+      <ConfigPanel
+        isOpen={configPanelOpen}
+        onClose={() => setConfigPanelOpen(false)}
+        onConfigUpdated={handleConfigUpdated}
       />
     </div>
   );
