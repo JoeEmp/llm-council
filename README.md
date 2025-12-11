@@ -4,10 +4,23 @@
 
 The idea of this repo is that instead of asking a question to your favorite LLM provider (e.g. OpenAI GPT 5.1, Google Gemini 3.0 Pro, Anthropic Claude Sonnet 4.5, xAI Grok 4, eg.c), you can group them into your "LLM Council". This repo is a simple, local web app that essentially looks like ChatGPT except it uses OpenRouter to send your query to multiple LLMs, it then asks them to review and rank each other's work, and finally a Chairman LLM produces the final response.
 
-In a bit more detail, here is what happens when you submit a query:
+## Features
+
+- **Multi-stage Deliberation**: A 3-stage process where multiple LLMs collaborate to answer your questions
+- **Anonymized Peer Review**: Stage 2 anonymizes responses to prevent bias in evaluation
+- **Real-time Model Comparison**: View and compare responses from multiple LLMs side-by-side
+- **Conversation Management**: Create, view, and delete conversation history
+- **Interactive Controls**: Stop generation, regenerate responses, and customize the council
+- **Internationalization**: Support for English and Chinese (中英文切换)
+- **Configuration Panel**: Easily manage which models are in your council
+- **Response Transparency**: View raw model evaluations and see how rankings are calculated
+
+## How It Works
+
+When you submit a query:
 
 1. **Stage 1: First opinions**. The user query is given to all LLMs individually, and the responses are collected. The individual responses are shown in a "tab view", so that the user can inspect them all one by one.
-2. **Stage 2: Review**. Each individual LLM is given the responses of the other LLMs. Under the hood, the LLM identities are anonymized so that the LLM can't play favorites when judging their outputs. The LLM is asked to rank them in accuracy and insight.
+2. **Stage 2: Review**. Each individual LLM is given the responses of the other LLMs. Under the hood, the LLM identities are anonymized so that the LLM can't play favorites when judging their outputs. The LLM is asked to rank them in accuracy and insight. Aggregate rankings are calculated across all evaluations.
 3. **Stage 3: Final response**. The designated Chairman of the LLM Council takes all of the model's responses and compiles them into a single final answer that is presented to the user.
 
 ## Vibe Code Alert
@@ -82,6 +95,22 @@ Then open http://localhost:5173 in your browser.
 ## Tech Stack
 
 - **Backend:** FastAPI (Python 3.10+), async httpx, OpenRouter API
-- **Frontend:** React + Vite, react-markdown for rendering
+- **Frontend:** React + Vite, react-markdown for rendering, react-i18next for internationalization
 - **Storage:** JSON files in `data/conversations/`
 - **Package Management:** uv for Python, npm for JavaScript
+
+## Application Details
+
+- **Backend Port:** 8002 (changed from 8000 to avoid conflicts)
+- **Frontend Port:** 5173 (Vite default)
+- **Default Council Models:** GPT-5.1, Gemini 3 Pro, Claude Sonnet 4.5, Grok 4
+- **Default Chairman:** Gemini 3 Pro
+
+## Usage Tips
+
+- Use **Enter** to send a message, **Shift+Enter** for a new line
+- Click **Stop** to halt generation if a model is taking too long
+- Use **Regenerate** to get new responses from all models
+- Delete conversations from the sidebar menu
+- Toggle between English and Chinese using the language selector in the sidebar
+- Customize your council members in the Config panel
