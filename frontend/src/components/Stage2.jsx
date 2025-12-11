@@ -36,6 +36,7 @@ function splitThinkingFromContent(text) {
 }
 
 function EvaluationWithThinking({ content, labelToModel }) {
+  const { t } = useTranslation();
   const deAnonymizedContent = deAnonymizeText(content, labelToModel);
   const { hasThinking, thinking, content: mainContent } = splitThinkingFromContent(deAnonymizedContent);
 

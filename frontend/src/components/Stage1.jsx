@@ -24,6 +24,7 @@ function splitThinkingFromContent(text) {
 }
 
 function ResponseWithThinking({ content }) {
+  const { t } = useTranslation();
   const { hasThinking, thinking, content: mainContent } = splitThinkingFromContent(content);
 
   if (!hasThinking) {

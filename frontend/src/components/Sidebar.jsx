@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
 import './Sidebar.css';
 
 export default function Sidebar({
@@ -8,6 +9,7 @@ export default function Sidebar({
   onSelectConversation,
   onNewConversation,
   onDeleteConversation,
+  onConfigClick,
 }) {
   const { t } = useTranslation();
 
@@ -57,6 +59,21 @@ export default function Sidebar({
             </div>
           ))
         )}
+      </div>
+
+      <div className="sidebar-footer">
+        <LanguageSelector />
+        <button
+          className="config-button"
+          onClick={onConfigClick}
+          title={t('configPanel.title')}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m20.5-4.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"></path>
+          </svg>
+          {t('configPanel.title')}
+        </button>
       </div>
     </div>
   );
