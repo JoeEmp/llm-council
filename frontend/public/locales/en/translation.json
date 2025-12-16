@@ -41,7 +41,7 @@
   },
   "sidebar": {
     "title": "LLM Council",
-    "new_conversation": "+ New Conversation",
+    "new_conversation": "New Conversation",
     "no_conversations": "No conversations yet",
     "messages": "messages",
     "delete_conversation": "Delete conversation",

@@ -41,7 +41,7 @@
   },
   "sidebar": {
     "title": "LLM 议事厅",
-    "new_conversation": "+ 新建对话",
+    "new_conversation": "新建对话",
     "no_conversations": "暂无对话",
     "messages": "条消息",
     "delete_conversation": "删除对话",
